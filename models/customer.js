@@ -61,7 +61,10 @@ class Customer {
       [name]
     );
 
+    console.log(`TESTING results: ${results.rows}`);
     const customer = results.rows[0];
+    console.log(`TEST customer from database: ${customer}`);
+
     if (customer === undefined) {
       const err = new Error(`No such customer: ${id}`);
       err.status = 404;

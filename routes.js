@@ -3,6 +3,7 @@
 const express = require("express");
 
 const Customer = require("./models/customer");
+
 const Reservation = require("./models/reservation");
 
 const router = new express.Router();
@@ -62,11 +63,30 @@ router.get("/:id/", async function (req, res, next) {
 
 // Show a customer, given their name
 router.get("/custname/:name", async (req, res, next) => {
+  // try {
+  //   let { name } = req.params;
+  //   // console.log(`TEST ${req.params.name}`);
+  //   name = name.charAt(0).toUpperCase();
+  //   console.log(`TEST ${name}`);
+  //   console.log(`TEST ${req.params.name}`);
+  //   const customer = await Customer.getByName(foundName);
+  //   console.log(`TEST ${customer}`);
+  //   const reservations = await customer.getReservations();
+  //   return res.render("customer_detail.html", { customer, reservations });
+  // } catch (err) {
+  //   return next(err);
+  // }
   try {
-    const { name } = req.params;
+    let { name } = req.params; // Capitalize the first letter of the name
+    if (name && typeof name === "string") {
+      name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
+    console.log(`TEST ${name}`);
+    console.log(`TEST ${req.params.name}`); // Use the capitalized name to get the customer
     const customer = await Customer.getByName(name);
-    const reservations = await customer.getReservations();
-    return res.render("customer_detail.html", { customer, reservations });
+    console.log(`TEST ${customer}`); // Get the reservations for the customer
+    const reservations = await customer.getReservations(); // Render the customer details page
+    return res.render("customer_list.html", { customer, reservations });
   } catch (err) {
     return next(err);
   }
